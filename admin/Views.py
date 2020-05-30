@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 from flask_admin.contrib.sqla import ModelView
+from flask_admin import AdminIndexView, expose
 from config import app_config, app_active
 
 config = app_config[app_active]
+
+
+class HomeView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        return self.render('home_admin.html', data={'username': 'Admin Aqui'})
 
 
 class UserView(ModelView):

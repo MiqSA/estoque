@@ -22,6 +22,8 @@ def create_app(config_name):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['FLASK_ADMIN_SWATCH'] = 'paper'
+
     db = SQLAlchemy(config.APP)
     start_views(app, db)
     db.init_app(app)

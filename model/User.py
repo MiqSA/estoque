@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from config import app_config, app_active
 from model.Role import Role
@@ -16,16 +17,17 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     last_update = db.Column(db.DateTime(6), onupdate=db.func.current_timestamp(), nullable=False)
-    recovery_code = db.Column(db.String(100), nullable=True)
+    recovery_code = db.Column(db.String(200), nullable=True)
     active = db.Column(db.Boolean(), default=1, nullable=False)
     role = db.Column(db.Integer, db.ForeignKey(Role.id), nullable=False)
     funcao = relationship(Role)
 
     def __repr__(self):
-        return '$s - %s' % (self.id, self.username)
+        return '{} - {}'.format(self.id, self.username)
 
 
     def get_user_by_email(self):
+        """ .. """
         return ''
 
 
