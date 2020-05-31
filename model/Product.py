@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from sqlalchemy import func
 
 from config import app_config, app_active
 from model.User import User
@@ -54,4 +55,24 @@ class Product(db.Model):
             print(e)
             db.session.rollback()
             return False
+
+    def get_total_products(self):
+        try:
+            res = db.session.query(func.count(Product.id)).first()
+        except Exception as e:
+            res = []
+            print(e)
+        finally:
+            db.session.close()
+        return res
+
+    def get_last_products(self):
+        try:
+            res = db.session.query(Product).order_by(Product.date_created).limit(5).all()
+        except Exception as e:
+            res = []
+            print(e)
+        finally:
+            db.session.close()
+        return res
 

@@ -55,3 +55,14 @@ class User(db.Model):
             return pbkdf2_sha256.verify(password_no_hash, password_database)
         except ValueError:
             return False
+
+    def get_total_users(self):
+        try:
+            res = db.session.query(func.count(User.id)).first()
+        except Exception as e:
+            res = []
+            print(e)
+        finally:
+            db.session.close()
+            return res
+
