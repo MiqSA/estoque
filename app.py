@@ -10,6 +10,7 @@ from admin.Admin import start_views
 
 # controllers
 from controller.User import UserController
+from controller.Product import ProductController
 
 config = app_config[app_active]
 
@@ -61,5 +62,26 @@ def create_app(config_name):
                                    data={'status': 200, 'msg': 'E-mail de recuperação enviado com sucesso'})
         else:
             return render_template('recovery.html', data={'status': 401, 'msg': 'Erro ao enviar e-mail de recuperação'})
+
+    @app.route('/product', methods=['POST'])
+    def save_products():
+        product = ProductController()
+        result = product.save_product(request.form)
+        if result:
+            message = "Inserido"
+        else:
+            message = "Não inserido"
+        return message
+
+    @app.route('/product', methods=['PUT'])
+    def update_products():
+        product = ProductController()
+        result = product.update_product(request.form)
+        if result:
+            message = "Editado"
+        else:
+            message = "Não Editado"
+        return message
+
 
     return app
