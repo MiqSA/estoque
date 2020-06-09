@@ -26,15 +26,18 @@ class Product(db.Model):
     usuario = relationship(User)
     categoria = relationship(Category)
 
-    def get_all():
+    def get_all(self, limit):
         try:
-            res = db.session.query(Product).all()
+            if limit is None:
+                res = db.session.query(Product).all()
+            else:
+                res = db.session.query(Product).order_by(Product.date_created).limit(limit).all()
         except Exception as e:
             res = []
             print(e)
         finally:
             db.session.close()
-            return res
+        return res
 
     def save(self):
         try:
@@ -76,3 +79,12 @@ class Product(db.Model):
             db.session.close()
         return res
 
+    def get_product_by_id(self):
+        try:
+            res = db.session.query(Product).filter(Product.id == self.id).first()
+        except Exception as e:
+            res = None
+            print(e)
+        finally:
+            db.session.close()
+        return res
