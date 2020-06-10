@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import AdminIndexView, expose
+from flask_login import current_user
+from flask import redirect
+
 from config import app_config, app_active
 from model.User import User
 from model.Category import Category
@@ -12,6 +15,15 @@ config = app_config[app_active]
 class HomeView(AdminIndexView):
     extra_css = [config.URL_MAIN + 'static/css/home.css',
                  'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css']
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
 
     @expose('/')
     def index(self):
@@ -30,6 +42,15 @@ class HomeView(AdminIndexView):
 
 
 class UserView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
     column_labels = {'funcao': 'Função', 'username': 'Nome de usuário', 'email': 'E-mail',
                      'date_created': 'Data de criação', 'last_update': 'Última atualização', 'active': 'Ativo',
                      'password': 'Senha', }
@@ -67,4 +88,37 @@ class UserView(ModelView):
                 User.set_password(form.password.data)
             else:
                 del form.password
+
+
+class RoleView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
+
+class CategoryView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
+
+class ProductView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
 

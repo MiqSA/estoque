@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+from flask_login import LoginManager, login_user, logout_user
 from flask import Flask, request, redirect, render_template, Response, json, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager, login_user, logout_user
 
 
 from functools import wraps
@@ -66,19 +66,25 @@ def create_app(config_name):
 
     @app.route('/login/')
     def login():
-        return render_template('login.html')
+        return render_template('login.html', data={'status': 200, 'msg': None, 'type': None})
 
     @app.route('/login/', methods=['POST'])
     def login_post():
         user = UserController()
+
         email = request.form['email']
         password = request.form['password']
+
         result = user.login(email, password)
+
         if result:
-            return redirect('/admin')
+            if result.role != 1:
+                return render_template('login.html', data={'status': 401, 'msg': 'Seu usuário não tem permissão para acessar o admin', 'type': 2})
+            else:
+                login_user(result)
+                return redirect('/admin')
         else:
-            return render_template('login.html',
-                                   data={'status': 401, ' msg': 'Dados de usuário incorretos', 'type': None})
+            return render_template('login.html', data={'status': 401, 'msg':'Dados de usuário incorretos', 'type': 1})
 
     @app.route('/recovery-password/')
     def recovery_password():
@@ -175,7 +181,7 @@ def create_app(config_name):
                 code = 200
                 response["message"] = "Login realizado com sucesso"
                 response["result"] = result
-        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header\
+        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header
 
     @app.route('/logout')
     def logout_send():
