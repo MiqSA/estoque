@@ -78,7 +78,7 @@ def create_app(config_name):
         result = user.login(email, password)
 
         if result:
-            if result.role != 1:
+            if result.role == 2:
                 return render_template('login.html', data={'status': 401, 'msg': 'Seu usuário não tem permissão para acessar o admin', 'type': 2})
             else:
                 login_user(result)
