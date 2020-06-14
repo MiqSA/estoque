@@ -6,3 +6,15 @@
 # Controle de Estoque
 
 :gift: Projeto de controle de estoque usando o Flask!
+
+Entre as características desse projeto destaca-se:
+
+ - Diferentes níveis de acesso;
+ - Cadastro de usuários por funções;
+ - Cadastro de categorias de produtos;
+ - Cadastro de produtos;
+ - Simples interface admin;
+ - API Rest disponível com autenticação no padrão JWT.
+ 
+Referências bibliográficas: 
+ - SILVA, Tiago. 'Flask de A a Z: crie aplicações web mais completas e robustas em Python'. Casa do Código. São Paulo. Brasil. 2019.
